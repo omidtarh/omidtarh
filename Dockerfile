@@ -26,6 +26,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 ### install python requirements
+COPY /requirements /seed/requirements
 COPY ./requirements.txt /seed/requirements.txt
 
 WORKDIR /seed
