@@ -12,8 +12,8 @@ logger = getLogger(__name__)
 class Cleansing(models.Model):
     def __init__(self, *args, **kwargs):
         """
-        Initialize the Cleansing class. Right now this class will not need to save anything to the database. It is simply
-        loading the rules from the JSON file upon initialization.
+        Initialize the Cleansing class. Right now this class will not need to save anything to the database. It is
+        simply loading the rules from the JSON file upon initialization.
 
         :param args:
         :param kwargs:
@@ -41,7 +41,7 @@ class Cleansing(models.Model):
         :param file_pk: Import file primary key
         :return:
         """
-        cache.set(Cleansing.cache_key(file_pk), {})
+        cache.set(Cleansing.cache_key(file_pk), [])
 
     @staticmethod
     def cache_key(file_pk):
@@ -72,7 +72,7 @@ class Cleansing(models.Model):
                 self.results[datum.id]['custom_id_1'] = datum.custom_id_1
                 self.results[datum.id]['cleansing_results'] = []
 
-            self.missing_matching_field(datum)
+            # self.missing_matching_field(datum)
             self.in_range_checking(datum)
             self.missing_values(datum)
             # self.data_type_check(datum)
@@ -238,16 +238,184 @@ class Cleansing(models.Model):
 
     def save_to_cache(self, file_pk):
         """
-        Save the results to the cache database.
+        Save the results to the cache database. The data in the cache are stored as a list of dictionaries. The data in
+        this class are stored as a dict of dict. This is important to remember because the data from the cache cannot
+        be simply loaded into the above structure.
 
         :param file_pk: Import file primary key
         :return: None
         """
 
-
-
+        # change the format of the data in the cache. Make this a list of objects instead of object of objects.
         existing_results = cache.get(Cleansing.cache_key(file_pk))
-        z = existing_results.copy()
-        z.update(self.results)
+
+        l = []
+        for key, value in self.results.iteritems():
+            l.append(value)
+
+        existing_results = existing_results + l
+
+        z = sorted(existing_results, key=lambda k: k['id'])
         cache.set(Cleansing.cache_key(file_pk), z, 3600)  # save the results for 1 hour
 
+    ASSESSOR_FIELDS = [
+        {
+            "title": "PM Property ID",
+            "sort_column": "pm_property_id",
+        },
+        {
+            "title": "Tax Lot ID",
+            "sort_column": "tax_lot_id",
+        },
+        {
+            "title": "Custom ID 1",
+            "sort_column": "custom_id_1",
+        },
+        {
+            "title": "Property Name",
+            "sort_column": "property_name",
+        },
+        {
+            "title": "Address Line 1",
+            "sort_column": "address_line_1",
+        },
+        {
+            "title": "Address Line 2",
+            "sort_column": "address_line_2",
+        },
+        {
+            "title": "County/District/Ward/Borough",
+            "sort_column": "district",
+        },
+        {
+            "title": "Lot Number",
+            "sort_column": "lot_number",
+        },
+        {
+            "title": "Block Number",
+            "sort_column": "block_number",
+        },
+        {
+            "title": "City",
+            "sort_column": "city",
+        },
+        {
+            "title": "State Province",
+            "sort_column": "state_province",
+        },
+        {
+            "title": "Postal Code",
+            "sort_column": "postal_code",
+        },
+        {
+            "title": "Year Built",
+            "sort_column": "year_built",
+        },
+        {
+            "title": "Use Description",
+            "sort_column": "use_description",
+        },
+        {
+            "title": "Building Count",
+            "sort_column": "building_count",
+        },
+        {
+            "title": "Property Notes",
+            "sort_column": "property_notes",
+        },
+        {
+            "title": "Recent Sale Date",
+            "sort_column": "recent_sale_date",
+        },
+        {
+            "title": "Owner",
+            "sort_column": "owner",
+        },
+        {
+            "title": "Owner Address",
+            "sort_column": "owner_address",
+        },
+        {
+            "title": "Owner City",
+            "sort_column": "owner_city_state",
+        },
+        {
+            "title": "Owner Postal Code",
+            "sort_column": "owner_postal_code",
+        },
+        {
+            "title": "Owner Email",
+            "sort_column": "owner_email",
+        },
+        {
+            "title": "Owner Telephone",
+            "sort_column": "owner_telephone",
+        },
+        {
+            "title": "Gross Floor Area",
+            "sort_column": "gross_floor_area",
+        },
+        {
+            "title": "Energy Star Score",
+            "sort_column": "energy_score",
+        },
+        {
+            "title": "Site EUI",
+            "sort_column": "site_eui",
+        },
+        {
+            "title": "Generation Date",
+            "sort_column": "generation_date",
+        },
+        {
+            "title": "Release Date",
+            "sort_column": "release_date",
+        },
+        {
+            "title": "Year Ending",
+            "sort_column": "year_ending",
+        },
+        {
+            "title": "Creation Date",
+            "sort_column": "created",
+        },
+        {
+            "title": "Modified Date",
+            "sort_column": "modified",
+        },
+        {
+            "title": "Conditioned Floor Area",
+            "sort_column": "conditioned_floor_area",
+        },
+        {
+            "title": "Occupied Floor Area",
+            "sort_column": "occupied_floor_area",
+        },
+        {
+            "title": "Site EUI Weather Normalized",
+            "sort_column": "site_eui_weather_normalized",
+        },
+        {
+            "title": "Source EUI",
+            "sort_column": "source_eui",
+        },
+        {
+            "title": "Source EUI Weather Normalized",
+            "sort_column": "source_eui_weather_normalized",
+        },
+        {
+            "title": "Building Certification",
+            "sort_column": "building_certification",
+        },
+        {
+            "title": "Energy Alerts",
+            "sort_column": "energy_alerts",
+        },
+        {
+            "title": "Space Alerts",
+            "sort_column": "space_alerts",
+        }]
+
+    ASSESSOR_FIELDS_BY_COLUMN = {
+        field['sort_column']: field for field in ASSESSOR_FIELDS
+        }
