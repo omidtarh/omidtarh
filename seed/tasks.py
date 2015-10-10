@@ -502,6 +502,7 @@ def map_row_chunk(chunk, file_pk, source_type, prog_key, increment, *args, **kwa
         model.clean()
         model.super_organization = import_file.import_record.super_organization
         model.save()
+
     if model:
         # Make sure that we've saved all of the extra_data column names
         save_column_names(model, mapping=mapping)
@@ -1148,7 +1149,8 @@ def _match_buildings(file_pk, user_pk):
     if not unmatched_buildings:
         _finish_matching(import_file, prog_key)
         return
-        # here we are going to normalize the addresses to match on address_1 field, this is not ideal because you could match on two locations with same address_1 but different city
+        # here we are going to normalize the addresses to match on address_1 field, this is not ideal because you could
+        # match on two locations with same address_1 but different city
     #     unmatched_normalized_addresses=[]
 
 
@@ -1254,10 +1256,21 @@ def _remap_data(import_file_pk):
 
 @shared_task
 def remap_data(import_file_pk):
-    """"Delete mapped buildings for current import file, re-map them."""
+    """Delete mapped buildings for current import file, re-map them."""
+
     import_file = ImportFile.objects.get(pk=import_file_pk)
     # Check to ensure that the building has not already been merged.
     mapping_cache_key = get_prog_key('map_data', import_file.pk)
+
+    # Make sure that our mapping cache progress is reset.
+    tmp_cache = {
+        'status': 'warning',
+        'progress': 0,
+        'message': 'Mapping started...',
+        'progress_key': mapping_cache_key
+    }
+    set_cache(mapping_cache_key, tmp_cache['status'], tmp_cache)
+
     if import_file.matching_done or import_file.matching_completion:
         result = {
             'status': 'warning',
@@ -1269,15 +1282,7 @@ def remap_data(import_file_pk):
 
     _remap_data.delay(import_file_pk)
 
-    # Make sure that our mapping cache progress is reset.
-    result = {
-        'status': 'warning',
-        'progress': 0,
-        'message': 'Mapped buildings already merged'
-    }
-    set_cache(mapping_cache_key, result['status'], result)
-    # Here we also return the mapping_prog_key so that the front end can
-    # follow the progress.
+    # Here we also return the mapping_prog_key so that the front end can follow the progress when run synchronously
     return {
         'status': 'success',
         'progress_key': mapping_cache_key
