@@ -14,15 +14,16 @@ angular.module('BE.seed.service.organization', []).factory('organization_service
 
     organization_factory.get_organizations = function() {
         var defer = $q.defer();
+        //DMcQ: Adding temporary timeout of two minutes (120,000 milliseconds) per issue 457. TODO: assess and refactor timeouts across application.
         $http({
             method: 'GET',
+            timeout: 120000, 
             'url': urls.accounts.get_organizations
         }).success(function(data, status, headers, config) {
             organization_factory.total_organizations_for_user = (data.organizations != undefined ) ? data.organizations.length : 0;
             defer.resolve(data);
         }).error(function(data, status, headers, config) {
             defer.reject(data, status);
-
         });
         return defer.promise;
     };
