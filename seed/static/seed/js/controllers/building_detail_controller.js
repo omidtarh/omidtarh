@@ -33,6 +33,32 @@ angular.module('BE.seed.controller.building_detail', [])
     $scope.data_columns = [];
     $scope.audit_logs = audit_payload.audit_logs;
     $scope.green_button_filenames = [];
+    
+
+    //DMCQ:TEMP FOR DEVELOPING TAGS
+
+    $scope.loadTags = function(query) {
+        return [
+          { "text": "Tag1" },
+          { "text": "Tag2" },
+          { "text": "Tag3" },
+          { "text": "Tag4" },
+          { "text": "Tag5" },
+          { "text": "Tag6" },
+          { "text": "Tag7" },
+          { "text": "Tag8" },
+          { "text": "Tag9" },
+          { "text": "Tag10" }
+        ];               
+    };
+
+    $scope.tags = [
+        { text: 'Tag1', style: 'tag-color-1' },
+        { text: 'Tag2', style: 'tag-color-2' },
+        { text: 'Tag3', style: 'tag-color-3' }
+    ];
+   
+    //END DMCQ:TEMP
 
     // gather green button filenames
     building_payload.imported_buildings.forEach(function(e) {
