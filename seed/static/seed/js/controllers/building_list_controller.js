@@ -57,6 +57,53 @@ angular.module('BE.seed.controller.building_list', [])
     $scope.create_project_error = false;
     $scope.create_project_error_message = "";
 
+    /* DMcQ:TEMP code */
+
+    $scope.loadTags = function(query) {
+        return [
+          { "text": "Tag1" },
+          { "text": "Tag2" },
+          { "text": "Tag3" },
+          { "text": "Tag4" },
+          { "text": "Tag5" },
+          { "text": "Tag6" },
+          { "text": "Tag7" },
+          { "text": "Tag8" },
+          { "text": "Tag9" },
+          { "text": "Tag10" }
+        ];               
+    };
+
+
+    /**
+     * open_edit_label_modal: opens the edit or manage labels modal. On return,
+     *   get_labels() and refresh_search() are called to update labels.
+     */
+    $scope.open_add_remove_labels_modal = function() {
+        var modalInstance = $uibModal.open({
+            templateUrl: urls.static_url + 'seed/partials/add_remove_labels_modal.html',
+            controller: 'edit_label_modal_ctrl',
+            resolve: {
+                labels: function () {
+                    return $scope.labels;
+                }
+            }
+        });
+
+        modalInstance.result.then(
+            function () {
+                get_labels();
+                refresh_search();
+        }, function (message) {
+                get_labels();
+                refresh_search();
+        });
+    };
+
+
+
+    /* End DMcQ:TEMP */
+
     /**
      * building table code
      */
@@ -81,6 +128,10 @@ angular.module('BE.seed.controller.building_list', [])
         // gets all labels for an org user
         project_service.get_labels().then(function(data) {
             // resolve promise
+            //DMCQ: TEMP 
+            //Assign a couple label.exists_in_selection properties for mockup UI
+            data.labels[0].exists_in_selection = true;
+            data.labels[1].exists_in_selection = true;
             $scope.labels = data.labels;
         });
     };

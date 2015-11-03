@@ -1,5 +1,5 @@
-<div class="section">
-    <div class="section_header_container" >
+<div class="section"  e="border:none;">
+    <div class="section_header_container" style="border:none;" >
         <div class="section_header fixed_height_short has_no_padding"  >
             <div class="section_action_container left">
                 <h2><i class="fa fa-building-o"></i> Building Information</h2>
@@ -12,26 +12,35 @@
                 <a roll="button" class="btn btn-primary btn-sm" ng-click="building.edit_form_showing = false; save_building()">Save Changes</a>
             </div>
         </div>
-
-        <div class="tag-section">
-            <div class="tag-section-label">
-                Tags:
-            </div>
-            <div class="tag-display-container"  ng-show="!building.edit_form_showing">
-                <span class="label label-primary tag">some tag</span><span class="label label-info tag">another tag</span>
-            </div>     
-            <div class="tag-edit-container" ng-show="building.edit_form_showing">
-                <tags-input ng-model="tags">
-                    <auto-complete source="loadTags($query)"></auto-complete>
-                </tags-input>
-            </div>         
-        </div>
-
     </div>
     <div class="section_content_container">
-        <div class="section_content">
+        <div class="section_content" >
+
+            <div class="label-edit-section">
+                
+                <div class="label-action">
+                    <div class="label-edit-text"
+                         ng-show="!building.edit_form_showing">
+                          Labels:
+                    </div>                
+                    <a  roll="button"
+                        class="btn btn-default btn-sm" 
+                        ng-click="open_add_remove_labels_modal()"
+                        ng-show="building.edit_form_showing">
+                        <i class="fa fa-tag"></i> Add/Remove Labels
+                    </a>                     
+                </div>
+                
+                <div class="label-container" style="display: inline-block;">
+                    <span ng-repeat="label in buildingLabels" class="label label-default" style="background-color:{$ label.color $}">
+                        {$ label.text $}                    
+                    </span>
+                </div>   
+                
+            </div>
+
             <div class="table_list_container">
-                <table class="table table-striped table_highlight_first">
+                <table class="table table-striped table_highlight_first" style="margin-left:20px;border:1px solid #DDD;">
                     <thead>
                         <tr>
                             <th>Field</th>

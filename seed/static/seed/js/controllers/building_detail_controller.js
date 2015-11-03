@@ -37,26 +37,40 @@ angular.module('BE.seed.controller.building_detail', [])
 
     //DMCQ:TEMP FOR DEVELOPING TAGS
 
-    $scope.loadTags = function(query) {
-        return [
-          { "text": "Tag1" },
-          { "text": "Tag2" },
-          { "text": "Tag3" },
-          { "text": "Tag4" },
-          { "text": "Tag5" },
-          { "text": "Tag6" },
-          { "text": "Tag7" },
-          { "text": "Tag8" },
-          { "text": "Tag9" },
-          { "text": "Tag10" }
-        ];               
+    $scope.buildingLabels = [
+        { text: 'Needs Review', color: '#458cc8' },
+        { text: 'Data Cleansing Error', color: '#779e1c' },
+        { text: 'Data Cleansing Warning', color: '#f2c41d' },
+        { text: 'Floor Area - None or low', color: '#939495' },
+
+
+    ];
+
+     /**
+     * open_edit_label_modal: opens the edit or manage labels modal. On return,
+     *   get_labels() and refresh_search() are called to update labels.
+     */
+    $scope.open_add_remove_labels_modal = function() {
+        var modalInstance = $uibModal.open({
+            templateUrl: urls.static_url + 'seed/partials/add_remove_labels_modal.html',
+            controller: 'edit_label_modal_ctrl',
+            resolve: {
+                labels: function () {
+                    return $scope.labels;
+                }
+            }
+        });
+
+        modalInstance.result.then(
+            function () {
+                get_labels();
+                refresh_search();
+        }, function (message) {
+                get_labels();
+                refresh_search();
+        });
     };
 
-    $scope.tags = [
-        { text: 'Tag1', style: 'tag-color-1' },
-        { text: 'Tag2', style: 'tag-color-2' },
-        { text: 'Tag3', style: 'tag-color-3' }
-    ];
    
     //END DMCQ:TEMP
 

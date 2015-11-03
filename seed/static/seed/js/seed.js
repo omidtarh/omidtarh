@@ -17,6 +17,7 @@ angular.module('BE.seed.vendor_dependencies', [
     ]);
 angular.module('BE.seed.controllers', [
     'BE.seed.controller.accounts',
+    'BE.seed.controller.add_remove_labels_modal',
     'BE.seed.controller.admin',
     'BE.seed.controller.building_detail',
     'BE.seed.controller.building_list',
@@ -35,6 +36,7 @@ angular.module('BE.seed.controllers', [
     'BE.seed.controller.edit_project_modal',
     'BE.seed.controller.existing_members_modal',
     'BE.seed.controller.export_modal',
+    'BE.seed.controller.label_admin',
     'BE.seed.controller.mapping',
     'BE.seed.controller.matching',
     'BE.seed.controller.matching_detail',
@@ -71,6 +73,7 @@ angular.module('BE.seed.services', [
     'BE.seed.service.cleansing',
     'BE.seed.service.dataset',
     'BE.seed.service.export',
+    'BE.seed.service.label',
     'BE.seed.service.mapping',
     'BE.seed.service.matching',
     'BE.seed.service.organization',
@@ -331,6 +334,10 @@ SEED_app.config(['$routeProvider', function ($routeProvider) {
         .when('/buildings/reports', {
             templateUrl: static_url + 'seed/partials/buildings_reports.html',
             controller: 'buildings_reports_controller'
+        })
+        .when('/buildings/labels', {
+            templateUrl: static_url + 'seed/partials/buildings_label_admin.html',
+            controller: 'label_admin_controller'
         })
         .when('/buildings/:building_id', {
             controller: 'building_detail_controller',
@@ -632,6 +639,10 @@ SEED_app.config(['$routeProvider', function ($routeProvider) {
                     });
                 }]
             }
+        })
+        .when('/labels', {
+            controller: 'labels_controller',
+            templateUrl: static_url + 'seed/partials/labels.html'
         })
         .otherwise({ redirectTo: '/' });
 

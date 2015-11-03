@@ -31,9 +31,18 @@
         window.BE.urls.update_building = "{% url "seed:update_building" %}";
 
         //DMcQ: Test for building reporting section        
-        window.BE.urls.get_building_summary_report_data = "{% url "seed:get_building_summary_report_data" %}";
-        window.BE.urls.get_building_report_data         = "{% url "seed:get_building_report_data" %}";
-        window.BE.urls.get_aggregated_building_report_data         = "{% url "seed:get_aggregated_building_report_data" %}";
+        window.BE.urls.get_building_summary_report_data = '{% url "seed:get_building_summary_report_data" %}';
+        window.BE.urls.get_building_report_data = '{% url "seed:get_building_report_data" %}';
+        window.BE.urls.get_aggregated_building_report_data = '{% url "seed:get_aggregated_building_report_data" %}';
+
+        //DMcQ: For new labels function
+        //Note: these urls should be refactored on the BE to be a more specific path, e.g. labels:get_labels
+        window.BE.urls.get_labels = '{% url "seed:get_labels" %}';
+        window.BE.urls.add_label = '{% url "seed:add_label" %}';
+        window.BE.urls.update_label = '{% url "seed:update_label" %}';
+        window.BE.urls.remove_label = '{% url "seed:delete_label" %}';
+        window.BE.urls.apply_label = '{% url "seed:apply_label" %}';
+        window.BE.urls.remove_label = '{% url "seed:remove_label" %}';
 
         // uploader URLS
         window.BE.urls.uploader_signature_endpoint = '{% url "data_importer:sign_policy_document" %}';

@@ -31,6 +31,7 @@
                 <td class="check is_aligned_center" ng-if="search.has_checkbox">
                     <input type="checkbox" value="" ng-model="b.checked" ng-change="search.add_remove_to_list(b)">
                 </td>
+                <td></td><!--tags-->
                 <td ng-repeat="c in columns" class="ellipsis {$ c.class $}" ng-class="{sorted: search.sort_column == c.sort_column}">
                     <span ng-if="c.link && is_project && c.is_extra_data">
                         <a ng-href="#/projects/{$ user.project_id $}/{$ b.canonical_building $}">{$ b.extra_data[c.sort_column] | stripImportPrefix $}</a>
