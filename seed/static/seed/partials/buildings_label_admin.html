@@ -67,25 +67,71 @@
         <div class="section_content_container" style="margin: 0px 25px; border-radius: 5px;" >
             <div class="section_content">
                 <div class="table_list_container">
-                    <table class="table table-striped">
-                        <tr ng-repeat="label in labels">
-                            <td class="label_column">
-                                <span class="label label-{$ label.label $}">{$ label.name $}</span>
-                                <span style="margin-left:20px;color:#999;"> Applied to 26 buildings</span>
+                    <table class="table table-striped table-hover table-condensed" >
+
+                        <tr style="font-weight: bold">
+                          <td style="width:30%">Name</td>
+                          <td style="width:30%">Color</td>
+                          <td style="width:30%"># Buildings with Label</td>
+                          <td width="width:10%" align="right">Edit</td>
+                        </tr>
+
+                        <tr ng-repeat="label in labels" >
+
+                            <td style="border:0px;">
+                                <span   editable-text="label.name" 
+                                        e-name="name" 
+                                        e-form="rowform" 
+                                        onbeforesave="checkLabelName($data, label.id)" 
+                                        class="label label-{$ label.label $}"
+                                        e-required>
+                                    {$ label.name || 'empty' $}
+                                </span>
                             </td>
-                          
-                            <td align="right" width="160">
-                                <button type="button" 
-                                        style="min-width:70px;"
-                                        class="btn btn-sm btn-default action_link" 
-                                        ng-click="edit_label(label)">
-                                        <i class="fa fa-pencil"></i> edit</button>
-                                <button type="button" 
-                                        style="min-width:70px;"
-                                        class="btn btn-sm btn-default action_link" 
-                                        ng-click="delete_label(label)">
-                                        <i class="fa fa-trash-o"></i> delete</button>
+
+                            <td style="border:0px;">
+                                <!-- editable status (select-local) -->
+                                <span   editable-select="label.color"
+                                        e-name="color" 
+                                        e-form="rowform" 
+                                        class="label label-{$ label.label $}"
+                                        e-ng-options="s.color as s.color for s in available_colors">
+                                    {$ label.color $}
+                                </span>
                             </td>
+
+                            <td style="border:0px;">
+                                <span style="color:#999;">26 buildings</span>
+                            </td>
+
+                            <td style="white-space: nowrap; border:0px;" align="right">
+
+                                <!-- form -->
+                                <form   editable-form name="rowform" 
+                                        onbeforesave="saveLabel($data, label.id)" 
+                                        ng-show="rowform.$visible" 
+                                        class="form-buttons form-inline" 
+                                        shown="inserted == label">
+                                  <button   type="submit" 
+                                            ng-disabled="rowform.$waiting"
+                                            class="btn btn-primary">
+                                    save
+                                  </button>
+                                  <button   type="button" 
+                                            ng-disabled="rowform.$waiting" 
+                                            ng-click="rowform.$cancel()"
+                                            class="btn btn-default">
+                                    cancel
+                                  </button>
+                                </form>
+
+                                <div class="buttons" ng-show="!rowform.$visible">
+                                  <button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
+                                  <button class="btn btn-danger" ng-click="removeLabel($index)">del</button>
+                                </div>  
+
+                            </td>
+
                         </tr>
                     </table>
                 </div>

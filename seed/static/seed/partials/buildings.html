@@ -33,34 +33,51 @@
         <div class="section_header fixed_height">
             <div class="section_action_container">            
 
-                    <div uib-dropdown class="btn-group" ng-style="nothing_selected_cursor()">
-                      <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" ng-disabled="nothing_selected()">
+                <div uib-dropdown class="btn-group" ng-style="nothing_selected_cursor()">
+                    <button type="button" 
+                            class="btn btn-default btn-sm dropdown-toggle" 
+                            data-toggle="dropdown" 
+                            ng-disabled="nothing_selected()">
                         Building Actions <span class="caret"></span>
-                      </button>
-                      <ul class="uib-dropdown-menu" role="menu">
-                        <li ng-hide="menu.user.organization.user_role === 'viewer'"><a data-toggle="modal" data-target="#newProjectModal" ng-click="set_initial_project_state()">Create a new project</a></li>
-                        <li ng-hide="menu.user.organization.user_role === 'viewer'"><a data-toggle="modal" data-target="#existingProjectModal" ng-click="create_project_state='create'">Add to an existing project</a></li>
-                      <li ng-hide="menu.user.organization.user_role === 'viewer'"><a ng-click="open_delete_modal()">Delete Buildings</a></li>
-                      <li><a ng-click="open_export_modal()">Export Buildings</a></li>
-                      <li><a ng-click="open_add_remove_labels_modal()">Add/Remove Labels</a></li>
-                      </ul>
-                    </div>
+                    </button>
+                    <ul class="uib-dropdown-menu" role="menu">
+                        <li ng-hide="menu.user.organization.user_role === 'viewer'">
+                            <a  data-toggle="modal" 
+                                data-target="#newProjectModal" 
+                                ng-click="set_initial_project_state()">
+                                Create a new project</a></li>
+                        <li ng-hide="menu.user.organization.user_role === 'viewer'">
+                            <a  data-toggle="modal" 
+                                data-target="#existingProjectModal" 
+                                ng-click="create_project_state='create'">
+                                Add to an existing project</a></li>
+                        <li ng-hide="menu.user.organization.user_role === 'viewer'">
+                            <a ng-click="open_delete_modal()">Delete Buildings</a></li>
+                        <li>
+                            <a ng-click="open_export_modal()">Export Buildings</a>
+                        </li>
+                        <li>
+                            <a ng-click="open_add_remove_labels_modal()">Add/Remove Labels</a>
+                        </li>
+                    </ul>
+                </div>
 
-                    <div class="btn-group" style="margin:0px 10px 0px 20px;" >
-                        Filter by tag:
-                    </div>
+                <div class="btn-group" style="margin:0px 10px 0px 20px;" >
+                    Filter by tag:
+                </div>
 
-                    <div class="btn-group" >
-                        <tags-input ng-model="tags" style="min-width:300px;">
-                            <auto-complete source="loadTags($query)"></auto-complete>
-                        </tags-input>
-                    </div>     
+                <div class="btn-group" >
+                    <tags-input ng-model="tags" style="min-width:300px;">
+                        <auto-complete source="loadTags($query)"></auto-complete>
+                    </tags-input>
+                </div>     
 
+                <div class="btn-group" style="margin-left:30px;">
                     <button type="button" 
                             class="btn btn-primary btn-sm"  >
-                        Filter
+                        Update Filters
                     </button>
-                   
+                </div>  
 
             </div>
         </div>

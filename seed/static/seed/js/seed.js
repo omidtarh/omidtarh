@@ -13,7 +13,8 @@ angular.module('BE.seed.vendor_dependencies', [
     'ui.bootstrap',
     'ui.sortable',
     'ui.tree',
-    'ngTagsInput'
+    'ngTagsInput',
+    'xeditable'
     ]);
 angular.module('BE.seed.controllers', [
     'BE.seed.controller.accounts',

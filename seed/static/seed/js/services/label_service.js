@@ -16,7 +16,20 @@ angular.module('BE.seed.service.label',
 
 
     /**    
+        Returns an array of labels, with the following properties:
+        
+        id : the id of the label
+        name : the text that appears in the label
+        color : the text description of the color
+        label : the css class (usually in bootstrap) used to generate the color style
 
+        For example
+            {                
+                id: 8                
+                name: "test9"
+                color: "blue"
+                label: "primary"
+            }
     */
     
     function get_labels() {
