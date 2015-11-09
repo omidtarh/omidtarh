@@ -3060,9 +3060,9 @@ def delete_label(request):
 @api_endpoint
 @ajax_request
 @login_required
-def apply_label(request):
+def update_building_label(request):
     """
-    Applies a label to buildings (within a project).
+    Updates label assignments to buildings. 
 
     Payload::
 
@@ -3071,8 +3071,8 @@ def apply_label(request):
                 "00010811",
                 "00010809"
             ],
-         "label": {"id": 1 },
-         "project_slug": "proj-1",
+         "add_labels": [{"id": 1 }, {"id":2},...],
+         "remove_labels": [{"id": 3}, {"id":4},...], 
          "search_params": {
             "filter_params": {
                 "project__slug": "proj-1"
@@ -3101,45 +3101,6 @@ def apply_label(request):
     return {'status': 'success'}
 
 
-@api_endpoint
-@ajax_request
-@login_required
-def remove_label(request):
-    """
-    Removes labels from buildings (within a project).
-
-    Payload::
-
-        {
-         "buildings": [
-                "IMP75-0004N0027"
-            ],
-         "project_slug": "proj-1",
-         "search_params": {
-            "filter_params": {
-                "project__slug": "proj-1"
-                },
-                "project_slug": 34,
-                "q": ""
-            },
-            "select_all_checkbox": false
-        }
-
-    Returns::
-
-        {'status': 'success'}
-
-    """
-    body = json.loads(request.body)
-
-    ProjectBuilding.objects.filter(
-        project__pk=body['project']['id'],
-        building_snapshot__pk=body['building']['id']
-    ).update(
-        status_label=None
-    )
-
-    return {'status': 'success'}
 
 
 

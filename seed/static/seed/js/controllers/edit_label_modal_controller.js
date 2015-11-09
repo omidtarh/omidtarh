@@ -5,14 +5,16 @@ angular.module('BE.seed.controller.edit_label_modal', [])
 .controller('edit_label_modal_ctrl', [
   '$scope',
   '$modalInstance',
+  'label_service',
+  'search',
   'labels',
-  'project_service',
-  function ($scope, $modalInstance, labels, project_service) {
+  function ($scope, $modalInstance, label_service, search, labels) {
+
     $scope.labels = labels;
     $scope.label_modal = {};
     $scope.label_modal.color = "gray";
     $scope.label_modal.label = "default";
-    $scope.available_colors = project_service.get_available_colors();
+    $scope.available_colors = label_service.get_available_colors();
     $scope.modal = {};
     $scope.modal.label = {};
     $scope.modal.label.state = "create";

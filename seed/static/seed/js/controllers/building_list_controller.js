@@ -19,6 +19,7 @@ angular.module('BE.seed.controller.building_list', [])
   'all_columns',
   'project_payload',
   'search_service',
+  'label_service',
   function(
     $scope,
     $routeParams,
@@ -35,7 +36,8 @@ angular.module('BE.seed.controller.building_list', [])
     default_columns,
     all_columns,
     project_payload,
-    search_service
+    search_service,
+    label_service
   ) {
     // extend the search_service
     $scope.search = angular.copy(search_service);
@@ -59,19 +61,16 @@ angular.module('BE.seed.controller.building_list', [])
 
     /* DMcQ:TEMP code */
 
-    $scope.loadTags = function(query) {
-        return [
-          { "text": "Tag1" },
-          { "text": "Tag2" },
-          { "text": "Tag3" },
-          { "text": "Tag4" },
-          { "text": "Tag5" },
-          { "text": "Tag6" },
-          { "text": "Tag7" },
-          { "text": "Tag8" },
-          { "text": "Tag9" },
-          { "text": "Tag10" }
-        ];               
+    /* Setup for labels for filter input */
+
+    $scope.filterLabels = [];
+
+    /*  This method is required by the ngTagsInput input control.
+        We don't need to update the list of labels shown, so just return entire list.
+    */
+    $scope.loadLabelsForFilter = function(query) {
+        
+        //todo : provide list of tags based on query        
     };
 
 
@@ -86,6 +85,9 @@ angular.module('BE.seed.controller.building_list', [])
             resolve: {
                 labels: function () {
                     return $scope.labels;
+                },
+                search: function () {
+                    return $scope.search;
                 }
             }
         });
@@ -126,12 +128,12 @@ angular.module('BE.seed.controller.building_list', [])
      */
     var get_labels = function(building) {
         // gets all labels for an org user
-        project_service.get_labels().then(function(data) {
+        label_service.get_labels().then(function(data) {
             // resolve promise
             //DMCQ: TEMP 
             //Assign a couple label.exists_in_selection properties for mockup UI
-            data.labels[0].exists_in_selection = true;
-            data.labels[1].exists_in_selection = true;
+            data.labels[0].in_bldg_selection = true;
+            data.labels[1].in_bldg_selection = true;
             $scope.labels = data.labels;
         });
     };
@@ -145,7 +147,6 @@ angular.module('BE.seed.controller.building_list', [])
     var refresh_search = function() {
         $scope.search.search_buildings();
     };
-
 
     /**
      * Projects code
@@ -282,6 +283,8 @@ angular.module('BE.seed.controller.building_list', [])
         $scope.project.deadline_date = null;
         $scope.project.end_date = null;
     };
+
+    /* DMcQ: moving logic to edit_label_modal_controller
     $scope.apply_label = function(label) {
         var search_params = {
             'q': $scope.query,
@@ -298,26 +301,35 @@ angular.module('BE.seed.controller.building_list', [])
             console.log({data: data, status: status});
         });
     };
+    */
+
+    /* DMcQ: moving logic to edit_label_modal_controller
     $scope.remove_label = function() {
         var empty_label = {};
         $scope.apply_label(empty_label);
     };
+    */
 
     /**
      * open_edit_label_modal: opens the edit or manage labels modal. On return,
      *   get_labels() and refresh_search() are called to update labels.
      */
+     /*
     $scope.open_edit_label_modal = function() {
         var modalInstance = $uibModal.open({
             templateUrl: urls.static_url + 'seed/partials/manage_labels_modal.html',
             controller: 'edit_label_modal_ctrl',
             resolve: {
-                labels: function () {
-                    return $scope.labels;
+                search: function () {
+                    return $scope.search;
+                },
+                selected_fields: function () {
+                    return $scope.columns.map(function (col) {
+                        return col.sort_column;
+                    });
                 }
             }
         });
-
         modalInstance.result.then(
             function () {
                 get_labels();
@@ -327,7 +339,8 @@ angular.module('BE.seed.controller.building_list', [])
                 refresh_search();
         });
     };
-
+    */
+    
     /**
      * open_export_modal: opens the export modal
      */

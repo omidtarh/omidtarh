@@ -76,8 +76,7 @@ urlpatterns = patterns(
     url(r'^add_label/$', 'add_label', name='add_label'),
     url(r'^update_label/$', 'update_label', name='update_label'),
     url(r'^delete_label/$', 'delete_label', name='delete_label'),
-    url(r'^apply_label/$', 'apply_label', name='apply_label'),
-    url(r'^remove_label/$', 'remove_label', name='remove_label'),
+    url(r'^update_building_label/$', 'update_building_label', name='update_building_label'),
 
     # New MCM endpoints
     url(

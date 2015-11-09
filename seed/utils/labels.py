@@ -19,8 +19,8 @@ def get_labels(user):
     labels = []
     for label in status_labels:
         labels.append({
+            'id': label.pk,
             'name': label.name,
             'color': label.color,
-            'id': label.pk,
         })
     return labels
