@@ -2933,19 +2933,21 @@ def get_aggregated_building_report_data(request):
 #DMcQ: Temporary location for label methods. Should be added to separate view.
 import json
 from ..utils import labels as label_utils
+import random #for mockup only
 
 @api_endpoint
 @ajax_request
 @login_required
 def get_labels(request):
     """
-    Gets all labels for any organization the user has access to.
+    Gets all labels for the current user's organization.
 
     If request object has 'search' object assigned, use that object to
     select subset of buildings, and then determine if each label appears
-    at least once in that set. If so, assign an 'is_assigned' property to 'true'.
+    at least once in that set. If so, assign an 'is_applied' property to
+    True, otherwise assign False.
 
-    If no 'search' object is provided, do not need to assign an 'is_assigned' property.
+    If no 'search' object is provided, do not need to assign an 'is_applied' property.
 
     (Note:  The search object is defined on the front end by the angular search_service.js   
             and is used in other Django methods. It has a host of properties, only some
@@ -2956,8 +2958,10 @@ def get_labels(request):
         {
             'search': (optional)
             {
-                "select_all_checkbox":  boolean, indicates if "select all" on building list was selected
-                "selected_buildings":   array of building ids. May be empty if select_all_checkbox is true.
+                "select_all_checkbox":  boolean, indicates if "select all" on building
+                                        list was selected
+                "selected_buildings":   array of building ids. May be empty if 
+                                        select_all_checkbox is true.
                 "filter_params" :       object with key/values for each filter used.
             }
         }
@@ -2979,7 +2983,9 @@ def get_labels(request):
     """
     labels = label_utils.get_labels(request.user)
 
-    #DMcQ: Randomly assign ''
+    #DMcQ: Randomly assign 'is_applied' property
+    for label in labels: 
+        label['is_applied'] = random.choice([True, False])
 
     return {'status': 'success', 'labels': labels}
 

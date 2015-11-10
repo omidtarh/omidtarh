@@ -54,12 +54,24 @@ angular.module('BE.seed.service.label',
     
     function get_labels(search) {
         var defer = $q.defer();
-        var args =  {
-                        organization_id: user_service.get_organization().id,
-                        search: search,
+
+         var args =  {
+                        organization_id: user_service.get_organization().id
                     };
+
+        if (search){
+            //Let's not send the entire search object as it's got quite a lot of data.
+            //Only send the props that the BE needs
+            var searchArgs = {
+                'selected_buildings' : search.selected_buildings,
+                'select_all_checkbox' : search.select_all_checkbox,
+                'filter_params' : search.filter_params
+            }
+            args.search = searchArgs;
+        }
+       
         $http({
-            method: 'GET',
+            method: 'POST',
             url: window.BE.urls.get_labels,
             params: args
         }).success(function(data, status, headers, config) {
@@ -73,11 +85,6 @@ angular.module('BE.seed.service.label',
                 // create 'text' propety needed for ngTagsInput control
                 lbl.text = lbl.name;
             }
-
-            //DMCQ: TEMP 
-            //Assign a couple label.is_assigned = true for mockup UI
-            data.labels[0].is_applied = true;
-            data.labels[1].is_applied = true;
 
             defer.resolve(data);
 
