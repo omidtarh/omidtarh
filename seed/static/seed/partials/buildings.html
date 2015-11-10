@@ -68,7 +68,7 @@
 
                 <div class="btn-group" >
                     <tags-input ng-model="filterLabels" style="min-width:300px;">
-                       
+                       <auto-complete source="loadLabelsForFilter($query)"></auto-complete>
                     </tags-input>
                 </div>     
 

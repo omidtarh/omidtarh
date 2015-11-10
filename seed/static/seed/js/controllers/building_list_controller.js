@@ -59,52 +59,53 @@ angular.module('BE.seed.controller.building_list', [])
     $scope.create_project_error = false;
     $scope.create_project_error_message = "";
 
-    /* DMcQ:TEMP code */
 
-    /* Setup for labels for filter input */
-
-    $scope.filterLabels = [];
 
     /*  This method is required by the ngTagsInput input control.
-        We don't need to update the list of labels shown, so just return entire list.
+        TODO: Write function to dynamically build array based on query.
     */
     $scope.loadLabelsForFilter = function(query) {
-        
-        //todo : provide list of tags based on query        
+        //todo : provide list of tags based on query
+        //right now just sending back list of labels
+        return $scope.labels;  
     };
 
 
     /**
-     * open_edit_label_modal: opens the edit or manage labels modal. On return,
-     *   get_labels() and refresh_search() are called to update labels.
+        Opens the add/remove labels modal.
+        All further actions for labels happen with that modal and it's related controller,
+        including creating a new label or applying to/removing from building.
+        When the modal is closed, the only task necessary here is to update the labels.
+        NOTE:   "Update filters" should have been clicked and $scope.labels properly
+                updated before this method is called.
      */
     $scope.open_add_remove_labels_modal = function() {
-        var modalInstance = $uibModal.open({
-            templateUrl: urls.static_url + 'seed/partials/add_remove_labels_modal.html',
-            controller: 'edit_label_modal_ctrl',
-            resolve: {
-                labels: function () {
-                    return $scope.labels;
-                },
-                search: function () {
-                    return $scope.search;
-                }
-            }
-        });
 
-        modalInstance.result.then(
-            function () {
-                get_labels();
-                refresh_search();
-        }, function (message) {
-                get_labels();
-                refresh_search();
+        //get labels with 'in-query' property by passing in current search state
+        label_service.get_labels($scope.search).then(function(data){
+            $scope.labels = data.labels;
+        
+            var modalInstance = $uibModal.open({
+                templateUrl: urls.static_url + 'seed/partials/add_remove_labels_modal.html',
+                controller: 'edit_label_modal_ctrl',
+                resolve: {
+                    labels: function () {
+                        return $scope.labels;
+                    },
+                    search: function () {
+                        return $scope.search;
+                    }
+                }
+            });
+            modalInstance.result.then(
+                function () {
+                    get_labels();
+                }, function (message) {
+                    get_labels();
+            });
         });
     };
 
-
-
-    /* End DMcQ:TEMP */
 
     /**
      * building table code
@@ -130,10 +131,6 @@ angular.module('BE.seed.controller.building_list', [])
         // gets all labels for an org user
         label_service.get_labels().then(function(data) {
             // resolve promise
-            //DMCQ: TEMP 
-            //Assign a couple label.exists_in_selection properties for mockup UI
-            data.labels[0].in_bldg_selection = true;
-            data.labels[1].in_bldg_selection = true;
             $scope.labels = data.labels;
         });
     };

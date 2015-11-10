@@ -18,12 +18,29 @@ angular.module('BE.seed.service.label',
 
 
     /**    
-        Returns an array of labels, with the following properties:
+
         
-        id : the id of the label
-        name : the text that appears in the label
-        color : the text description of the color
-        label : the css class (usually in bootstrap) used to generate the color style
+
+        Returns an array of labels.
+    
+        @param {object} search  -   Optional search object. If provided, server should
+                                    mark each label in the response with a boolean 
+                                    property 'exists-in-set'
+
+        @return {object}            Returns a promise object that will resolve an
+                                    array of label objects on success.
+
+        Label objects have the following properties:
+        
+            id {integer}        the id of the label
+            name {string}       the text that appears in the label
+            text {string}       same as name, needed for ngTagsInput control
+            color {string}      the text description of the label's color (e.g. 'blue')
+            label {string}      the css class (usually in bootstrap) used to generate the color style
+                                (poorly named, we should refactor to 'css-class' or something more accurate
+                                or change how color is applied)
+            in-query {boolean}  if a search object was passing in, this boolean indicates
+                                if label was present in set of buildings.
 
         For example
             {                
@@ -31,32 +48,50 @@ angular.module('BE.seed.service.label',
                 name: "test9"
                 color: "blue"
                 label: "primary"
+                exists-in-set : true
             }
     */
     
-    function get_labels() {
+    function get_labels(search) {
         var defer = $q.defer();
         var args =  {
-                        organization_id: user_service.get_organization().id
+                        organization_id: user_service.get_organization().id,
+                        search: search,
                     };
         $http({
             method: 'GET',
             url: window.BE.urls.get_labels,
             params: args
         }).success(function(data, status, headers, config) {
-            // add bootstrap label and button class names
-            for (var i = 0; i < data.labels.length; i++) {
-                data.labels[i].label = label_helper_service.lookup_label(data.labels[i].color);
+            
+            //update label properties
+            var len = data.labels.length;
+            for (var i = 0; i < len; i++) {
+                var lbl = data.labels[i];
+                // add bootstrap label class names
+                lbl.label = label_helper_service.lookup_label(lbl.color);
+                // needed for ngTagsInput control
+                lbl.text = lbl.name;
             }
+
+            //DMCQ: TEMP 
+            //Assign a couple label.in_query = true for mockup UI
+            data.labels[0].in_query = true;
+            data.labels[1].in_query = true;
+
             defer.resolve(data);
+
         }).error(function(data, status, headers, config) {
             defer.reject(data, status);
         });
         return defer.promise;
     };
 
+    /* CRUD FUNCTIONS FOR LABELS */
+    /* ~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-    function add_label(){
+    /* Add a label to an organizations list of labels */
+    function create_label(){
         var defer = $q.defer();
         $http({
             method: 'POST',
@@ -72,6 +107,8 @@ angular.module('BE.seed.service.label',
         return defer.promise;
     }
 
+
+    /* Update an existing a label in an organization */
     function update_label(){
         var defer = $q.defer();
         $http({
@@ -88,6 +125,7 @@ angular.module('BE.seed.service.label',
         return defer.promise;
     }
 
+    /* Delete a label from the set of labels for an organization */
     function delete_label(){
         var defer = $q.defer();
         $http({
@@ -104,12 +142,20 @@ angular.module('BE.seed.service.label',
         return defer.promise;
     }
 
-    /*  This method updates selected buildings with supplied labels. 
-        For the selected buildings, add labels from add_labels argument and 
-        remove labels from the remove_labels object.
-    */
 
-    function update_building_labels(buildings, select_all_checkbox, add_label_ids, remove_label_ids, search_params, org_id) {
+    /* FUNCTIONS FOR LABELS WITHIN BUIDINGS  */
+    /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+    /*  This method updates selected buildings with the supplied sets of labels. 
+
+        @param {array} add_label_ids        an array of label ids to apply to selected buildings
+        @param {array} remove_label_ids     an array of label ids to remove from selected buildings
+        @param {array} search_params        a search object that has properties to be used
+                                            to generate a query for buildings
+        @return {object}                    a promise object that resolves server response (success or error)
+
+    */
+    function update_building_labels(add_label_ids, remove_label_ids, search_params, org_id) {
         var defer = $q.defer();
         $http({
             method: 'POST',
@@ -118,8 +164,6 @@ angular.module('BE.seed.service.label',
                 'add_label_ids': add_labels,
                 'remove_label_ids': remove_labels,
                 'org_id': org_id,
-                'buildings': buildings,
-                'select_all_checkbox': select_all_checkbox,
                 'search_params': search_params
             }
         }).success(function(data, status, headers, config) {
