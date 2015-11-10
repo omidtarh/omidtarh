@@ -2941,6 +2941,27 @@ def get_labels(request):
     """
     Gets all labels for any organization the user has access to.
 
+    If request object has 'search' object assigned, use that object to
+    select subset of buildings, and then determine if each label appears
+    at least once in that set. If so, assign an 'is_assigned' property to 'true'.
+
+    If no 'search' object is provided, do not need to assign an 'is_assigned' property.
+
+    (Note:  The search object is defined on the front end by the angular search_service.js   
+            and is used in other Django methods. It has a host of properties, only some
+            of which are relative here.)
+
+    Payload::
+
+        {
+            'search': (optional)
+            {
+                "select_all_checkbox":  boolean, indicates if "select all" on building list was selected
+                "selected_buildings":   array of building ids. May be empty if select_all_checkbox is true.
+                "filter_params" :       object with key/values for each filter used.
+            }
+        }
+
     Returns::
 
         {
@@ -2951,11 +2972,15 @@ def get_labels(request):
              'name': name of label,
              'color': color of label,
              'id': label's ID
+             'in-query': boolean. True if label is in one or more buildings in query.
             }, ...
          ]
         }
     """
     labels = label_utils.get_labels(request.user)
+
+    #DMcQ: Randomly assign ''
+
     return {'status': 'success', 'labels': labels}
 
 
@@ -3067,20 +3092,18 @@ def update_building_label(request):
     Payload::
 
         {
-         "buildings": [
-                "00010811",
-                "00010809"
-            ],
-         "add_labels": [{"id": 1 }, {"id":2},...],
-         "remove_labels": [{"id": 3}, {"id":4},...], 
-         "search_params": {
-            "filter_params": {
-                "project__slug": "proj-1"
-                },
-                "project_slug": 34,
-                "q": ""
+            "buildings": [123,456,...],
+            "add_labels": [{"id": 1 }, {"id":2},...],
+            "remove_labels": [{"id": 3}, {"id":4},...], 
+            "select_all_checkbox": false,
+            "search_params": {
+                "filter_params": {
+                    "project__slug": "proj-1"
+                    },
+                
             },
-            "select_all_checkbox": false
+            "org_id": 123
+            
         }
 
     Returns::
@@ -3098,6 +3121,7 @@ def update_building_label(request):
         search_params=body['search_params'],
         user=request.user,
     )
+
     return {'status': 'success'}
 
 

@@ -48,7 +48,7 @@
                                     ng-model="label.isChecked"
                                     btn-checkbox-true="1" 
                                     btn-checkbox-false="0"
-                                    ng-show="label.exists_in_selection" 
+                                    ng-show="label.is_applied" 
                                     class="btn btn-sm btn-default action_link" 
                                     ng-class="{'btn-danger':label.isChecked}"
                                     >Remove Label
@@ -59,7 +59,7 @@
                                     ng-model="label.isChecked"
                                     btn-checkbox-true="1" 
                                     btn-checkbox-false="0"
-                                    ng-show="!label.exists_in_selection" 
+                                    ng-show="!label.is_applied" 
                                     class="btn btn-sm btn-default action_link" 
                                     ng-class="{'btn-primary':label.isChecked}"
                                     >Add Label

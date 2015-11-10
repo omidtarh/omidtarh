@@ -73,11 +73,11 @@ angular.module('BE.seed.controller.building_list', [])
 
     /**
         Opens the add/remove labels modal.
-        All further actions for labels happen with that modal and it's related controller,
+        All further actions for labels happen with that modal and its related controller,
         including creating a new label or applying to/removing from building.
+
         When the modal is closed, the only task necessary here is to update the labels.
-        NOTE:   "Update filters" should have been clicked and $scope.labels properly
-                updated before this method is called.
+    
      */
     $scope.open_add_remove_labels_modal = function() {
 
