@@ -1603,7 +1603,11 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 	}
 }
 
-#manageLabelsModal {
+
+//DMcQ: Get rid of #manageLabelsModel when removing all labels+projects code 
+//since we won't need that modal anymore.
+
+#updateBuildingLabelsModal {
 	.modal-body {
 	
 		.add_text,
@@ -1635,7 +1639,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 		}
 
 		.input-group-btn {
-				
+		
 			.btn-default {
 				color: @white;
 				background-color: #999;
@@ -1643,6 +1647,10 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 			.caret {
 				border-top-color: @white;
 			}
+		}
+
+		.btn-default {
+			min-width: 70px;
 		}
 	}
 }

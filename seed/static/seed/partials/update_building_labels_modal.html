@@ -1,4 +1,4 @@
-<div  id="manageLabelsModal">
+<div  id="updateBuildingLabelsModal">
       <div class="modal-header" >
         <button type="button" class="close" aria-hidden="true" ng-click="close()"><i class="fa fa-times"></i></button>
         <h4 class="modal-title" id="manageLabelsModalLabel">Add/Remove Labels</h4>
@@ -34,7 +34,7 @@
                     </button>
                 </div>
             </div>
-            <div class="edit_text">Add or remove an existing label</div>
+            <div class="edit_text">Add or remove labels from {$ number_matching_search $} selected buildings</div>
             <div class="table_list_container"  style="max-height:400px;overflow:scroll;">
                 <table class="table table-striped">
                     <tr ng-repeat="label in labels">
@@ -43,26 +43,27 @@
                         </td>
                         <td align="right">
 
-                             <button type="button" 
+                            <button type="button" 
                                     uib-btn-checkbox 
-                                    ng-model="label.isChecked"
+                                    ng-model="label.is_checked_remove"
+                                    ng-show="!label.is_applied"
                                     btn-checkbox-true="1" 
                                     btn-checkbox-false="0"
-                                    ng-show="label.is_applied" 
                                     class="btn btn-sm btn-default action_link" 
-                                    ng-class="{'btn-danger':label.isChecked}"
-                                    >Remove Label
+                                    ng-class="{'btn-danger':label.is_checked_remove}"
+                                    ng-click="toggle_remove(label)"
+                                    >Remove
                             </button>   
 
                             <button type="button" 
                                     uib-btn-checkbox 
-                                    ng-model="label.isChecked"
+                                    ng-model="label.is_checked_add"
                                     btn-checkbox-true="1" 
                                     btn-checkbox-false="0"
-                                    ng-show="!label.is_applied" 
                                     class="btn btn-sm btn-default action_link" 
-                                    ng-class="{'btn-primary':label.isChecked}"
-                                    >Add Label
+                                    ng-class="{'btn-primary':label.is_checked_add}"
+                                    ng-click="toggle_add(label)"
+                                    >Add
                             </button>                           
                         </td>
                     </tr>

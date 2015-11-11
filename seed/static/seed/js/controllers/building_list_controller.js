@@ -39,6 +39,7 @@ angular.module('BE.seed.controller.building_list', [])
     search_service,
     label_service
   ) {
+
     // extend the search_service
     $scope.search = angular.copy(search_service);
     $scope.search.url = urls.search_buildings;
@@ -72,22 +73,22 @@ angular.module('BE.seed.controller.building_list', [])
 
 
     /**
-        Opens the add/remove labels modal.
+        Opens the update building labels modal.
         All further actions for labels happen with that modal and its related controller,
         including creating a new label or applying to/removing from building.
 
         When the modal is closed, the only task necessary here is to update the labels.
-    
-     */
-    $scope.open_add_remove_labels_modal = function() {
 
-        //get labels with 'in-query' property by passing in current search state
+     */
+    $scope.open_update_building_labels_modal = function() {
+
+        //get labels with 'is-applied' property by passing in current search state
         label_service.get_labels($scope.search).then(function(data){
             $scope.labels = data.labels;
         
             var modalInstance = $uibModal.open({
-                templateUrl: urls.static_url + 'seed/partials/add_remove_labels_modal.html',
-                controller: 'edit_label_modal_ctrl',
+                templateUrl: urls.static_url + 'seed/partials/update_building_labels_modal.html',
+                controller: 'update_building_labels_modal_ctrl',
                 resolve: {
                     labels: function () {
                         return $scope.labels;

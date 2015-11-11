@@ -32,15 +32,15 @@ angular.module('BE.seed.service.label',
 
         Label objects have the following properties, with 'text' and 'color' props assigned locally.
         
-            id {integer}        the id of the label
-            name {string}       the text that appears in the label
-            text {string}       same as name, needed for ngTagsInput control
-            color {string}      the text description of the label's color (e.g. 'blue')
-            label {string}      the css class (usually in bootstrap) used to generate the color style
-                                (poorly named, we should refactor to 'css-class' or something more accurate
-                                or change how color is applied)
-            in-query {boolean}  if a search object was passing in, this boolean indicates
-                                if label was present in set of buildings.
+            id {integer}            the id of the label
+            name {string}           the text that appears in the label
+            text {string}           same as name, needed for ngTagsInput control
+            color {string}          the text description of the label's color (e.g. 'blue')
+            label {string}          the css class (usually in bootstrap) used to generate the color style
+                                    (poorly named, we should refactor to 'css-class' or something more accurate
+                                    or change how color is applied)
+            is_applied {boolean}    if a search object was passing in, this boolean indicates
+                                    if label was present in set of buildings.
 
         For example
             {                

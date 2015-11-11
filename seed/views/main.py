@@ -2976,7 +2976,7 @@ def get_labels(request):
              'name': name of label,
              'color': color of label,
              'id': label's ID
-             'in-query': boolean. True if label is in one or more buildings in query.
+             'is_applied': boolean. True if label is in one or more buildings in query.
             }, ...
          ]
         }

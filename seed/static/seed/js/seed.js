@@ -18,7 +18,6 @@ angular.module('BE.seed.vendor_dependencies', [
     ]);
 angular.module('BE.seed.controllers', [
     'BE.seed.controller.accounts',
-    'BE.seed.controller.add_remove_labels_modal',
     'BE.seed.controller.admin',
     'BE.seed.controller.building_detail',
     'BE.seed.controller.building_list',
@@ -48,6 +47,7 @@ angular.module('BE.seed.controllers', [
     'BE.seed.controller.organization',
     'BE.seed.controller.organization_settings',
     'BE.seed.controller.project',
+    'BE.seed.controller.update_building_labels_modal',
     'BE.seed.controller.security'
     ]);
 angular.module('BE.seed.filters', [

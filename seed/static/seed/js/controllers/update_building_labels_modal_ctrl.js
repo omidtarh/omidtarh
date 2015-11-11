@@ -1,17 +1,23 @@
 
 
-angular.module('BE.seed.controller.add_remove_labels_modal', [])
-.controller('add_remove_labels_modal_ctrl', [
+angular.module('BE.seed.controller.update_building_labels_modal', [])
+.controller('update_building_labels_modal_ctrl', [
   '$scope',
   '$modalInstance',
+  'label_service',
   'labels',
-  'project_service',
-  function ($scope, $modalInstance, labels, project_service) {
+  'search',
+  function ($scope, $modalInstance, label_service, labels, search) {
+
+    if (search.selected_buildings && search.selected_buildings.length > 0){
+        $scope.number_matching_search = search.selected_buildings.length;
+    } 
+    
     $scope.labels = labels;
     $scope.label_modal = {};
     $scope.label_modal.color = "gray";
     $scope.label_modal.label = "default";
-    $scope.available_colors = project_service.get_available_colors();
+    $scope.available_colors = label_service.get_available_colors();
     $scope.modal = {};
     $scope.modal.label = {};
     $scope.modal.label.state = "create";
@@ -24,8 +30,19 @@ angular.module('BE.seed.controller.add_remove_labels_modal', [])
         $scope.modal.label.state = "create";
     };
 
+    $scope.toggle_add = function(label){
+        if (label.is_checked_remove && label.is_checked_add) {
+            label.is_checked_remove = false;
+        }
+    }
+    $scope.toggle_remove = function(label){
+        if (label.is_checked_remove && label.is_checked_add) {
+            label.is_checked_add = false;
+        }
+    }
+
     $scope.add_label = function(label) {
-        project_service.add_label(label).then(function(data){
+        label_service.add_label(label).then(function(data){
             // resolve promise
             get_labels();
             $scope.initialize_label_modal();
@@ -33,7 +50,7 @@ angular.module('BE.seed.controller.add_remove_labels_modal', [])
     };
 
     $scope.delete_label = function(label) {
-        project_service.delete_label(label).then(function(data){
+        label_service.delete_label(label).then(function(data){
             // resolve promise
             get_labels();
         });
@@ -45,7 +62,7 @@ angular.module('BE.seed.controller.add_remove_labels_modal', [])
     };
 
     $scope.update_label = function(label) {
-        project_service.update_label(label).then(function(data){
+        label_service.update_label(label).then(function(data){
             // resolve promise
             get_labels();
             $scope.initialize_label_modal();
@@ -53,7 +70,7 @@ angular.module('BE.seed.controller.add_remove_labels_modal', [])
     };
     var get_labels = function(building) {
         // gets all labels for an org user
-        project_service.get_labels().then(function(data) {
+        label_service.get_labels().then(function(data) {
             // resolve promise
             $scope.labels = data.labels;
         });
